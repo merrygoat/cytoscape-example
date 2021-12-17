@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Cytoscape Example</title>
+
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+</head>
+<body>
+
+<div id="graph-container"></div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.19.1/cytoscape.min.js"></script>
+<script src="https://unpkg.com/dagre@0.8.5/dist/dagre.js"></script>
+<script src="https://unpkg.com/cytoscape-dagre@2.3.2/cytoscape-dagre.js"></script>
+<script src="data.js"></script>
+
+
+<script>
+
+    var cy = cytoscape({
+        pixelRatio: '1',
+        container: document.getElementById('graph-container'), // container to render in
+        elements: data,
+        style: style = [
+            {
+                selector: 'node',
+                style: {
+                    'background-color': '#666',
+                    'label': 'data(id)'
+                }
+            },
+            {
+                selector: 'edge',
+                style: {
+                    'width': 3,
+                    'line-color': 'grey',
+                    'target-arrow-color': 'grey',
+                    'target-arrow-shape': 'triangle',
+                    'curve-style': 'bezier'
+                }
+            },
+
+        ],
+        layout: {
+            name: 'dagre',
+            spacingFactor: 1.5
+        }
+    });
+
+    cy.on('tap', 'node', function () {
+            // Get predecessors and filter for nodes (otherwise it includes edges too)
+            let parents = this.predecessors("node")
+            // For each node found, log its id to the consolw
+            parents.forEach(function (ele) {
+                console.log(ele.id());
+            })
+        }
+    )
+
+
+</script>
+
+
+</body>
+
+</html>
